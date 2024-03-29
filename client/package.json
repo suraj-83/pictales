@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@react-oauth/google": "^0.12.1",
     "antd": "^5.15.2",
     "axios": "^1.6.7",
     "moment": "^2.30.1",

@@ -1,6 +1,7 @@
 import React from 'react'
 import moment from 'moment'
 import { useDispatch } from 'react-redux'
+import { HeartOutlined,EditFilled,DeleteFilled} from '@ant-design/icons';
 
 import { deletePost, likePost } from '../../../actions/posts.js'
 
@@ -59,9 +60,9 @@ const Post = ({ post, setCurrentId }) => {
             onClick={() => dispatch(deletePost(post._id))}
           >Delete</button>
           <button
-            className='rounded-md bg-green-500 hover:bg-green-300 px-4 py-1 text-white font-semibold'
+            className='rounded-md flex gap-1 bg-green-500 hover:bg-green-300 px-4 py-1 text-white font-semibold'
             onClick={() => setCurrentId(post._id)}
-          >Edit</button>
+          >Edit<EditFilled /></button>
         </div>
       </div>
 

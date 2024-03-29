@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
+import React, { useState } from 'react'
+import { useGoogleLogin } from '@react-oauth/google'
+import { useDispatch } from 'react-redux'
+import axios from 'axios'
+
+import { AUTH } from '../../constants/auth.js'
+
 const Auth = () => {
-const [isSignUp, setIsSignUp] = useState(true)
-const [showPass, setShowPass] = useState(false)
-const [userData, setUserData] = useState({
+  const [isSignUp, setIsSignUp] = useState(true)
+  const [showPass, setShowPass] = useState(false)
+  const [userData, setUserData] = useState({
     fname: '', lname: '', email: '', password: ''
-})
+  })
 
-const handleSubmit = (e) => {
+  const [accessToken, setAccessToken] = useState('')
+  const [profileObj, setProfileObj] = useState({})
+  const dispatch = useDispatch()
+
+  const handleSubmit = (e) => {
     e.preventDefault()
-}
+  }
 
-return (
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeRes) => {
+        console.log(codeRes)
+        setAccessToken(codeRes?.access_token)
+        axios
+        get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Accept: 'application/json'
+            }
+        })
+        .then((res) => {
+            setProfileObj(res.data)
+            try {
+                const action = {
+                    type: AUTH,
+                    data: { profileObj, accessToken }
+                }
+                dispatch(action)
+            } catch (err) {
+                console.log(err)
+            }
+        })
+        .catch((err) => console.log(err))
+    },
+    onError: (err) => {
+        console.warn(err)
+    }
+  })
+
+  return (
     <div
         className='flex justify-center items-center py-10'
     >
@@ -69,9 +107,14 @@ return (
                     />
                     <button
                         onClick={() => setShowPass(!showPass)}
-                        className='absolute right-1 px-2'
-                    >{showPass ? <EyeOutlined /> : <EyeInvisibleOutlined />}</button>
+                        className='absolute right-1 top-1 px-2'
+                    >{showPass ? 'Q' : 'O'}</button>
                 </div>
+
+                <button
+                    onClick={googleLogin}
+                    className='bg-blue-500 text-white font-semibold rounded-md py-2 hover:bg-blue-600'
+                >Google Login</button>
 
                 <button
                     type='submit'
