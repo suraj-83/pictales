@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useGoogleLogin } from '@react-oauth/google'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-
+import { EyeInvisibleFilled,EyeFilled } from '@ant-design/icons'
 import { AUTH } from '../../constants/auth.js'
 
 const Auth = () => {
@@ -107,8 +107,8 @@ const Auth = () => {
                     />
                     <button
                         onClick={() => setShowPass(!showPass)}
-                        className='absolute right-1 top-1 px-2'
-                    >{showPass ? 'Q' : 'O'}</button>
+                        className='absolute right-1 px-2'
+                    >{showPass ? <EyeFilled/> : <EyeInvisibleFilled/>  }</button>
                 </div>
 
                 <button
